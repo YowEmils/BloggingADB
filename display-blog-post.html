@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Blog Post Details</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+      }
+      .container {
+        width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      h2 {
+        margin: 0;
+      }
+      p {
+        margin-top: 10px;
+      }
+      a {
+        display: block;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- <h2>Blog Post Details</h2> -->
+      <!-- <p><strong>Title:</strong> <span id="postTitle"></span></p> -->
+      <!-- <p><strong>Content:</strong> <span id="postContent"></span></p> -->
+      <!-- <p><strong>Author User ID:</strong> <span id="postAuthor"></span></p> -->
+      <!-- <p><strong>Status:</strong> <span id="postStatus"></span></p> -->
+      <a href="/create-blog-post">Create New Blog!</a>
+      <br />
+    </div>
+
+    <script>
+      // JavaScript to populate the post details from the query parameters
+      // const params = new URLSearchParams(window.location.search);
+      // document.getElementById("postTitle").textContent = params.get("title");
+      // document.getElementById("postContent").textContent =
+      //   params.get("content");
+      // document.getElementById("postAuthor").textContent = params.get("author");
+      // document.getElementById("postStatus").textContent = params.get("status");
+      // make a get request to the API to get the post details
+      const fetch_blog_posts = async () => {
+        const response = await fetch(
+          `http://localhost:3000/all-blog-posts`,
+        ).then((res) => res.json());
+        response.forEach((post) => {
+          // sample data response
+          // [{"_id":"6580077dc41f90a2e7606a8a","title":"Dizz Nuts","content":"alk;jsdhfaksfhjda","userId":"asdfasdf","publicationDate":"2023-12-18T08:49:01.341Z","lastModifiedDate":"2023-12-18T08:49:01.341Z","likesCount":0,"commentsCount":0,"tags":["asdfasdfaf"],"status":"draft","__v":0},]
+          const html_temp = `
+            <h2>Blog Post Details</h2>
+      <p><strong>Title:</strong> <span id="postTitle">${post.title}</span></p>
+      <p><strong>Content:</strong> <span id="postContent">${
+        post.content
+      }</span></p>
+      <p><strong>Author User ID:</strong> <span id="postAuthor">${
+        post.userId
+      }</span></p>
+      <p><strong>Status:</strong> <span id="postStatus">${
+        post.status
+      }</span></p>
+      <p><strong>Comments:</strong> <span id="postComments">${post.comments.join(
+        "<br>",
+      )}</span></p>
+      <button onclick="edit_post('${post._id}')">EDIT</button>
+      <button onclick="delete_post('${post._id}')">DELETE</button>
+      <button onclick="add_comment('${post._id}')">ADD COMMENT</button>
+      <button onclick="delete_comments('${post._id}')">DELETE COMMENTS</button>
+      <hr>
+      `;
+          document.getElementsByClassName("container")[0].innerHTML +=
+            html_temp;
+        });
+      };
+      fetch_blog_posts();
+      const delete_post = async (id) => {
+        console.log(`DELETE POST ${id}`);
+        const response = await fetch(
+          `http://localhost:3000/delete-blog-post/${id}`,
+        ).then((res) => res.json());
+        console.log(response.message);
+        alert(response.message);
+      };
+
+      // write a function that takes the post id and prompts the user for the new content of the post and make the request to the api
+      const edit_post = async (id) => {
+        const new_content = prompt("Enter new content");
+        const response = await fetch(
+          `http://localhost:3000/update-blog-post/${id}?content=${new_content}`,
+        ).then((res) => res.json());
+        console.log(response.message);
+        alert(response.message);
+        location.reload();
+      };
+
+      // write a function that takes the post id and prompts the user for a new comment of the post and make the request to the api
+      const add_comment = async (id) => {
+        const new_comment = prompt("Enter new comment");
+        const response = await fetch(
+          `http://localhost:3000/add-comment/${id}?comment=${new_comment}`,
+        ).then((res) => res.json());
+        console.log(response.message);
+        alert(response.message);
+        location.reload();
+      };
+
+      // write a function that takes the post id and makes the request to the api to delete all comments of the post
+      const delete_comments = async (id) => {
+        const response = await fetch(
+          `http://localhost:3000/delete-comments/${id}`,
+        ).then((res) => res.json());
+        console.log(response.message);
+        alert(response.message);
+        location.reload();
+      };
+    </script>
+  </body>
+</html>
