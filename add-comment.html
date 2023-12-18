@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Comment</title>
+</head>
+<body>
+    <h1>Add Comment</h1>
+    <form action="/add-comment" method="post">
+        <label for="commentId">Comment ID:</label>
+        <input type="text" id="commentId" name="commentId" required><br>
+
+        <label for="userId">User ID:</label>
+        <input type="text" id="userId" name="userId" required><br>
+
+        <label for="postId">Post ID:</label>
+        <input type="text" id="postId" name="postId" required><br>
+
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" rows="4" cols="50" required></textarea><br>
+
+        <label for="timestamp">Timestamp:</label>
+        <input type="text" id="timestamp" name="timestamp" required><br>
+
+        <label for="likesCount">Likes Count:</label>
+        <input type="text" id="likesCount" name="likesCount" required><br>
+
+        <button type="submit">Add Comment</button>
+    </form>
+</body>
+</html>
